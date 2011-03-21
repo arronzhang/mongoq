@@ -17,8 +17,12 @@ col.insert({"init": true}, function(err, doc) {
 				col.update({age: 587}, {"$set":{update:true}}, {upsert: true, multi: true, safe: true}, function(err, doc) {
 					//don't need to return the document
 					assert.strictEqual(err, null);
-					testdb.close();
-					console.log("Test ok");
+					col.update({age: 587}, {"$set":{reupdate:true}});
+					col.findItems({reupdate: true}, function(err, doc) {
+						assert.equal(doc.length, 1);
+						testdb.close();
+						console.log("Test ok");
+					});
 				});
 			});
 		});
