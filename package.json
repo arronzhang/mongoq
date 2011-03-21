@@ -1,6 +1,6 @@
 {
     "name": "mongoq"
-  , "version": "0.0.1"
+  , "version": "0.0.2"
   , "description": "Use mongoDB like this: db('testdb').collection('users').find(function(err, cursor){});"
   , "keywords": ["mongodb", "mongoq"]
   , "author" :          "Hidden <zzdhidden@gmail.com>"
