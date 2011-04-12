@@ -22,7 +22,9 @@ Bridge all the methods from Collection
 >     findItems(..., callback(err, itemsArray))
 
 
-###Support [connection string](http://www.mongodb.org/display/DOCS/Connections).
+###Support connection string
+
+[Mongodb doc for connection string](http://www.mongodb.org/display/DOCS/Connections)
 
 Connect to "testdb" database
 
