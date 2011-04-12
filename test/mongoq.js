@@ -1,6 +1,7 @@
 var assert = require("assert");
 var db = require("mongoq");
-var testdb = db("testdb");
+//var testdb = db("testdb", {host: "localhost", port: "27017"});
+var testdb = db("mongodb:\/\/localhost/testdb");
 var col = testdb.collection("col");
 //equal ok notEqual deepEqual
 //['insert', 'remove', 'rename', 'insertAll', 'save', 'update', 'distinct', 'count', 'drop', 'findAndModify', 'find', 'findOne', 'createIndex', 'ensureIndex', 'indexInformation', 'dropIndex', 'dropIndexes', 'mapReduce', 'group']

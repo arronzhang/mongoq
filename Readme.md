@@ -21,11 +21,24 @@ Bridge all the methods from Collection
 
 >     findItems(..., callback(err, itemsArray))
 
+
+###Support [connection string](http://www.mongodb.org/display/DOCS/Connections).
+
+Connect to "testdb" database
+
+>     var testdb = db("testdb");
+>     var testdb = db("mongodb://localhost/testdb");
+>     var testdb = db("mongodb://localhost:27017/testdb");
+
+Connect and login to the "testdb" database as user "fred" with passowrd "foobar"
+
+>     var testdb = db("mongodb://fred:foobar@localhost/testdb");
+
 Example
 -----------------------------------------
 
 	var db = require("mongoq");
-	var testdb = db("testdb");
+	var testdb = db("mongodb://localhost/testdb");
 	var col = testdb.collection("col");
 	col.insert({"init": true}, function(err, doc) {
 		col.drop(function(err) {
