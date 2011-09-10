@@ -1,3 +1,7 @@
 support
 test
 examples
+build
+.lock-wscript
+node_modules
+npm-debug.log

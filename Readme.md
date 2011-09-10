@@ -30,7 +30,7 @@ Connect to "testdb" database
 
 >     var testdb = db("testdb");
 >     var testdb = db("mongodb://localhost/testdb");
->     var testdb = db("mongodb://localhost:27017/testdb");
+>     var testdb = db("mongodb:\/\/fred:foobar@localhost:27017/testdb?auto_reconnect=true&poolSize=2");
 
 Connect and login to the "testdb" database as user "fred" with passowrd "foobar"
 
