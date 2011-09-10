@@ -19,7 +19,7 @@ module.exports = {
 		options.port.should.eql("27017");
 		options.username.should.eql("fred");
 		options.password.should.eql("foobar");
-		db.dbname.should.eql("testdb");
+		db.name.should.eql("testdb");
 
 		db = mongoq("mongodb:\/\/127.0.0.1:27018/testdb?auto_reconnect");
 		options = db.options;
@@ -42,6 +42,6 @@ module.exports = {
 		should.strictEqual(options.username, undefined);
 		options.auto_reconnect.should.be.true;
 		should.strictEqual(options.poolSize, undefined);
-		db.dbname.should.eql("testdb");
+		db.name.should.eql("testdb");
 	}
 };
