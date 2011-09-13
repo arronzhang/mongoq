@@ -1,5 +1,6 @@
 
 test:
+	@echo "Please start mongodb[localhost:27017] at first."
 	@echo "Test mongoq"
 	@NODE_ENV=test expresso \
 		-I lib \
