@@ -51,7 +51,6 @@ Prvide a simple [connection string](http://www.mongodb.org/display/DOCS/Connecti
 
 methods
 
-*	open(callback)
 *	close(callback)
 *	admin(callback)
 *	collectionNames(collectionName?, callback) 
