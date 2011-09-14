@@ -71,8 +71,8 @@ module.exports = {
 		, error = false;
 		db.on("close", function() {
 			close = true;
-		});
-		db.open(function(err, originalDb) {
+		})
+		.open(function(err, originalDb) {
 			dbopen = true;
 			should.exist(originalDb);
 			should.equal(err, null);
@@ -80,8 +80,8 @@ module.exports = {
 		});
 		db2.on("error", function() {
 			error = true;
-		});
-		db2.open(function(err) {
+		})
+		.open(function(err) {
 			db2open = true;
 			err.should.be.an.instanceof(Error);
 		});
@@ -101,8 +101,8 @@ module.exports = {
 			should.exist(originalDb);
 			should.equal(err, null);
 
-		});
-		db.close(function() {
+		})
+		.close(function() {
 			hadClose = true;
 		});
 		beforeExit(function() {
@@ -112,7 +112,7 @@ module.exports = {
 	}
 	, "test db inherit methods": function(beforeExit) {
 		var db = mongoq("mongoqTest")
-		hadOpen = false;
+		, hadOpen = false;
 		db.dropCollection("test", function(err, success) {
 			db.createCollection("test", function(err, collection) {
 				should.equal(err, null);
@@ -127,6 +127,31 @@ module.exports = {
 					});
 					hasCollectionTest.should.be.true;
 					db.close();
+				});
+			});
+		});
+		beforeExit(function() {
+			should.strictEqual(hadOpen, true);
+		});
+	}
+	, "test db authenticate": function(beforeExit) {
+		var db = mongoq("mongoqTest")
+		, db2 = mongoq("mongodb:\/\/admin:foobar@localhost:27017/mongoqTest")
+		, hadOpen = false;
+		db.removeUser("admin", function(err, success) {
+			db.addUser("admin", "foobar", function(err, user) {
+				db.authenticate("admin", "foobar", function(err, success) {
+					should.not.exist(err);
+					success.should.be.true;
+					db.close();
+					db2.options.username.should.eql("admin");
+					db2.options.password.should.eql("foobar");
+					db2.open(function(err, oDb) {
+						hadOpen = true;
+						db2.isAuthenticate.should.be.true;
+						should.not.exist(err);
+						db2.close();
+					});
 				});
 			});
 		});
