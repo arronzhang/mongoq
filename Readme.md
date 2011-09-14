@@ -2,9 +2,17 @@
 mongoq
 ============================
 
-Use mongoDB like this: db("testdb").collection("users").find(function(err, cursor){});
+Use mongoDB like this: mongoq("testdb").collection("users").find().toArray(function(err, users){});
 
-Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
+Base on [node-mongodb-native][mongodb-native]
+
+
+Features
+-----------------------------
+
+*	Standard connection string format
+*	Full [node-mongodb-native][mongodb-native] methods and events supports
+*	Chainable api
 
 
 Installation
@@ -12,52 +20,126 @@ Installation
 
 >     npm install mongoq
 
-mongoq
+Work like node-mongodb-native
 -----------------------------------------
 
-Bridge all the methods from Collection
+Mongoq bridge all the methods and events from [mongodb native database][mongodb-native-database] and [mongodb native collections][mongodb-native-collections], and make it chainable.
 
-###additional methods
+###Database
 
->     findItems(..., callback(err, itemsArray))
+Prvide a simple [connection string](http://www.mongodb.org/display/DOCS/Connections)
+
+>     var mongoq = require("mongoq");
+>
+>     //use default server localhost:27017, auto_reconnect false, poolSize 1
+>     var db = mongoq("testdb"); 
+>
+>     //use options
+>     db = mongoq("testdb", {auto_reconnect: true, host: "127.0.0.1", port: "27017"}); 
+>
+>     //connection string
+>     db = mongoq("mongodb://localhost/testdb"); 
+>
+>     // Connect and login to the "testdb" database as user "admin" with passowrd "foobar"
+>     db = mongoq("mongodb://admin:foobar@localhost:27017/testdb?auto_reconnect=true;poolSize=2");
+>
+>     //Repl set servers
+>     db = mongoq("mongodb://admin:foobar@localhost:27017,localhost:27018/testdb?reconnectWait=2000;retries=20");
+>
+>     //Add user
+>     db.addUser("admin", "foobar", function(err) {});
+
+methods
+
+*	open(callback)
+*	close(callback)
+*	admin(callback)
+*	collectionNames(collectionName?, callback) 
+*	collection(collectionName, options?, callback)
+*	collections(callback)
+*	dereference(dbRef, callback)
+*	logout(options, callback) Logout user from server, Fire off on all connections and remove all auth info
+*	authenticate(username, password, callback)
+*	addUser(username, password, callback)
+*	removeUser(username, callback)
+*	createCollection(collectionName, options?, callback)
+*	dropCollection(collectionName, callback)
+*	renameCollection(fromCollection, toCollection, callback)
+*	lastError(options, connectionOptions, callback) 
+*	error(options, callback)
+*	lastStatus(callback) 
+*	previousErrors(callback)
+*	executeDbCommand(commandHash, options?, callback)
+*	executeDbAdminCommand(commandHash, callback)
+*	resetErrorHistory(callback)
+*	createIndex(collectionName, fieldOrSpec, options?, callback) Create an index on a collection
+*	ensureIndex(collectionName, fieldOrSpec, options?, callback) Ensure index, create an index if it does not exist
+*	dropIndex(collectionName, indexName, callback) Drop Index on a collection
+*	indexInformation(collectionName, options..., callback) 
+*	dropDatabase(callback)
+*	cursorInfo(callback) Fetch the cursor information
+*	executeCommand(dbCommand, options, callback)
+
+events
+
+*	close
+*	error
+*	timeout
+
+###Collection
+
+>     var mongoq = require("mongoq");
+>     var db = mongoq("mongodb://localhost/testdb"); 
+>     var users = db.collection("users");
+>     users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"});
+
+methods
+
+*	insert (docs, options?, callback?) 
+*	remove (selector?, options?, callback?) 
+*	rename (newName, callback) 
+*	insertAll (docs, options?, callback?) 
+*	save (doc, options?, callback?)
+*	update (selector, document, options?, callback?) //  options:upsert,multi,safe
+*	distinct (key, query?, callback?) 
+*	count (query?, callback)
+*	drop (callback) 
+*	findAndModify (query, sort, doc, options?, callback?) // options: remove,unshift,new
+*	find () //return Cursor
+*	findOne (queryObject, options?, callback) 
+*	createIndex (fieldOrSpec, options, callback?)
+*	ensureIndex (fieldOrSpec, options, callback?)
+*	indexInformation (options, callback)
+*	dropIndex (name, callback)
+*	dropIndexes (callback)
+*	mapReduce (map, reduce, options, callback)
+*	group (keys, condition, initial, reduce, command, callback)
+*	options (callback)
 
 
-###Support connection string
+###Cursor
 
-[Mongodb doc for connection string](http://www.mongodb.org/display/DOCS/Connections)
+>     var mongoq = require("mongoq");
+>     var db = mongoq("mongodb://localhost/testdb"); 
+>     var users = db.collection("users");
+>     var cursor = users.find();
+>     cursor.toArray(function(err, users){
+>     	db.close();
+>     });
 
-Connect to "testdb" database
 
->     var testdb = db("testdb");
->     var testdb = db("mongodb://localhost/testdb");
->     var testdb = db("mongodb:\/\/fred:foobar@localhost:27017/testdb?auto_reconnect=true&poolSize=2");
+methods
 
-Connect and login to the "testdb" database as user "fred" with passowrd "foobar"
-
->     var testdb = db("mongodb://fred:foobar@localhost/testdb");
-
-Example
------------------------------------------
-
-	var db = require("mongoq");
-	var testdb = db("mongodb://localhost/testdb");
-	var col = testdb.collection("col");
-	col.insert({"init": true}, function(err, doc) {
-		col.drop(function(err) {
-			//testdb.close();
-			var data = [{'name':'William Shakespeare', 'email':'william@shakespeare.com', 'age':587},{'name':'Jorge Luis Borges', 'email':'jorge@borges.com', 'age': 587}];
-			col.insert(data, function(err, doc) {
-				col.findItems({}, function(err, doc){
-					col.update({age: 587}, {"$set":{update:true}}, {upsert: true, multi: true, safe: true}, function(err, doc) {
-						//don't need to return the document
-						testdb.close();
-						console.log("Test ok");
-					});
-				});
-			});
-		});
-	});
-
+*	toArray(callback)
+*	each(callback)
+*	count(callback)
+*	sort(keyOrList, direction) //=> this
+*	limit(limit) //=> this
+*	skip(limit) //=> this
+*	batchSize(limit) //=> this
+*	nextObject(callback)
+*	getMore(callback)
+*	explain(callback)
 
 ## License 
 
@@ -83,3 +165,8 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+[mongodb-native]: https://github.com/christkv/node-mongodb-native
+[mongodb-native-database]: https://github.com/christkv/node-mongodb-native/blob/master/docs/database.md
+[mongodb-native-collections]: https://github.com/christkv/node-mongodb-native/blob/master/docs/collections.md
