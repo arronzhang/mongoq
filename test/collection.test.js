@@ -101,5 +101,27 @@ module.exports = {
 			hadOpen.should.be.true;
 		});
 	}
+	, "test cursor": function(beforeExit) {
+		var users = mongoq("mongoqTest").collection("users" + (colnum++))
+		, hadOpen = false;
+		users.drop(function() {
+			users.insert([{name: "Jack", phone: 1234567, email: "jake@mail.com"}, {name: "Lucy", phone: 123, email: "lucy@mail.com"}], function() {
+				users.find().skip(1).limit(1).toArray(function(err, docs) { //Callback
+					hadOpen = true;
+					should.exist( docs );
+					docs.should.be.an.instanceof( Array );
+					docs.should.have.length(1);
+					var user = docs[0];
+					user.name.should.be.eql("Lucy");
+					user.phone.should.be.equal(123);
+					user._id.should.be.ok;
+					users.db.close();
+				});
+			});
+		});
+		beforeExit(function() {
+			hadOpen.should.be.true;
+		});
+	}
 };
 
