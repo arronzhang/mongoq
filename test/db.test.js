@@ -55,6 +55,11 @@ module.exports = {
 		server.port.should.eql("27017");
 		server.autoReconnect.should.be.true;
 		db.name.should.eql("mongoqTest");
+
+		db = mongoq("mongoqTest", {auto_reconnect: true, host: "127.0.0.1", port: "1233"});
+		server = db.server;
+		server.host.should.equal("127.0.0.1");
+		server.port.should.eql("1233");
 	}
 
 	, "test db events[error,close,timeout]": function(beforeExit) {
