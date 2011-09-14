@@ -2,6 +2,8 @@
 var mongoq = require('mongoq')
 , should = require('should');
 
+var colnum = 1;
+
 module.exports = {
 	"test collection options": function(beforeExit) {
 		var users = mongoq("mongoqTest", {auto_reconnect: true}).collection("users", {slaveOk: false})
@@ -22,7 +24,7 @@ module.exports = {
 		});
 	}
 	, "test inherit methods": function(beforeExit) {
-		var users = mongoq("mongoqTest").collection("users")
+		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
 			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
@@ -42,14 +44,47 @@ module.exports = {
 		});
 	}
 	, "test find": function(beforeExit) {
-		var users = mongoq("mongoqTest").collection("users2")
+		var db = mongoq("mongoqTest")
+		, colname = "users" + (colnum++)
+		, users = db.collection(colname)
 		, hadOpen = false;
 		users.drop(function() {
 			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
-				users.find(function(err, cursor) { //Callback
-					should.not.exist( err );
-					should.exist( cursor );
-				}).toArray(function(err, docs) {
+				db.close(function() {
+					//Reconnect
+					users.find(function(err, cursor) { //Callback
+						should.not.exist( err );
+						should.exist( cursor );
+					}).toArray(function(err, docs) {
+						hadOpen = true;
+						should.exist( docs );
+						docs.should.be.an.instanceof( Array );
+						docs.should.have.length(1);
+						var user = docs[0];
+						user.name.should.be.eql("Jack");
+						user.phone.should.be.equal(1234567);
+						user._id.should.be.ok;
+						db.close();
+					});
+				});
+
+			});
+		});
+		var num = 0;
+		db.on("open", function() {
+			num ++;
+		});
+		beforeExit(function() {
+			hadOpen.should.be.true;
+			num.should.be.equal(2);
+		});
+	}
+	, "test findItems": function(beforeExit) {
+		var users = mongoq("mongoqTest").collection("users" + (colnum++))
+		, hadOpen = false;
+		users.drop(function() {
+			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
+				users.findItems(function(err, docs) { //Callback
 					hadOpen = true;
 					should.exist( docs );
 					docs.should.be.an.instanceof( Array );
@@ -60,7 +95,6 @@ module.exports = {
 					user._id.should.be.ok;
 					users.db.close();
 				});
-
 			});
 		});
 		beforeExit(function() {
