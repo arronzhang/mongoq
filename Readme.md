@@ -27,7 +27,7 @@ Mongoq bridge all the methods and events from [mongodb native database][mongodb-
 
 ###Database
 
-Prvide a simple [connection string](http://www.mongodb.org/display/DOCS/Connections)
+Provide a simple [connection string](http://www.mongodb.org/display/DOCS/Connections)
 
 >     var mongoq = require("mongoq");
 >
