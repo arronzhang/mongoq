@@ -47,7 +47,8 @@ module.exports = {
 		var db = mongoq("mongoqTest")
 		, colname = "users" + (colnum++)
 		, users = db.collection(colname)
-		, hadOpen = false;
+		, hadOpen = false
+		, hadOpen2 = false;
 		users.drop(function() {
 			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
 				db.close(function() {
@@ -64,7 +65,10 @@ module.exports = {
 						user.name.should.be.eql("Jack");
 						user.phone.should.be.equal(1234567);
 						user._id.should.be.ok;
-						db.close();
+						users.find(function(err, cursor){
+							hadOpen2 = true;
+							db.close();
+						});
 					});
 				});
 
@@ -74,8 +78,10 @@ module.exports = {
 		db.on("open", function() {
 			num ++;
 		});
+
 		beforeExit(function() {
 			hadOpen.should.be.true;
+			hadOpen2.should.be.true;
 			num.should.be.equal(2);
 		});
 	}
