@@ -129,5 +129,26 @@ module.exports = {
 			hadOpen.should.be.true;
 		});
 	}
+	, "test group": function(beforeExit) {
+		var users = mongoq("mongoqTest").collection("users" + (colnum++))
+		, hadOpen = false;
+		users.drop(function() {
+			//Test count by group.
+			users.insert([{name: "Jack", sex: "male", email: "jake@mail.com"}, {name: "Lucy", sex: "female", email: "lucy@mail.com"}, {name: "Lili", sex: "female", email: "lili@mail.com"}], function() {
+				users.group({ "sex":true }, {}, {count:0}, function(obj, prev){ prev.count++ }, function(err, docs){
+					//dcos=> [ { sex: 'male', count: 1 }, { sex: 'female', count: 2 } ]
+					should.exist( docs );
+					docs.should.be.an.instanceof( Array );
+					docs.should.have.length(2);
+					hadOpen = true;
+					users.db.close();
+				});
+			});
+		});
+		beforeExit(function() {
+			hadOpen.should.be.true;
+		});
+
+	}
 };
 
