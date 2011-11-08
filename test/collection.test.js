@@ -27,7 +27,7 @@ module.exports = {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
-			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
+			users.insert({name: "Jack", phone: 1234567, email: "jack@mail.com"}, function() {
 				users.findOne(function(err, user) {
 					should.not.exist( err );
 					should.exist( user );
@@ -50,7 +50,7 @@ module.exports = {
 		, hadOpen = false
 		, hadOpen2 = false;
 		users.drop(function() {
-			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
+			users.insert({name: "Jack", phone: 1234567, email: "jack@mail.com"}, function() {
 				db.close(function() {
 					//Reconnect
 					users.find(function(err, cursor) { //Callback
@@ -89,7 +89,7 @@ module.exports = {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
-			users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"}, function() {
+			users.insert({name: "Jack", phone: 1234567, email: "jack@mail.com"}, function() {
 				users.findItems(function(err, docs) { //Callback
 					hadOpen = true;
 					should.exist( docs );
@@ -111,7 +111,7 @@ module.exports = {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
-			users.insert([{name: "Jack", phone: 1234567, email: "jake@mail.com"}, {name: "Lucy", phone: 123, email: "lucy@mail.com"}], function() {
+			users.insert([{name: "Jack", phone: 1234567, email: "jack@mail.com"}, {name: "Lucy", phone: 123, email: "lucy@mail.com"}], function() {
 				users.find().skip(1).limit(1).toArray(function(err, docs) { //Callback
 					hadOpen = true;
 					should.exist( docs );
@@ -134,14 +134,19 @@ module.exports = {
 		, hadOpen = false;
 		users.drop(function() {
 			//Test count by group.
-			users.insert([{name: "Jack", sex: "male", email: "jake@mail.com"}, {name: "Lucy", sex: "female", email: "lucy@mail.com"}, {name: "Lili", sex: "female", email: "lili@mail.com"}], function() {
+			users.insert([{name: "Jack", sex: "male", email: "jack@mail.com"}, {name: "Lucy", sex: "female", email: "lucy@mail.com"}, {name: "Lili", sex: "female", email: "lili@mail.com"}], function() {
 				users.group({ "sex":true }, {}, {count:0}, function(obj, prev){ prev.count++ }, function(err, docs){
 					//dcos=> [ { sex: 'male', count: 1 }, { sex: 'female', count: 2 } ]
 					should.exist( docs );
 					docs.should.be.an.instanceof( Array );
 					docs.should.have.length(2);
-					hadOpen = true;
-					users.db.close();
+					users.group({ "sex":true }, {name: "Jack", email: "jack@mail.com"}, {count:0}, function(obj, prev){ prev.count++ }, function(err, docs){
+						should.exist( docs );
+						docs.should.be.an.instanceof( Array );
+						docs.should.have.length(1);
+						hadOpen = true;
+						users.db.close();
+					});
 				});
 			});
 		});
