@@ -144,6 +144,8 @@ module.exports = {
 						should.exist( docs );
 						docs.should.be.an.instanceof( Array );
 						docs.should.have.length(1);
+						docs[0].count.should.be.equal(1);
+						docs[0].sex.should.be.equal("male");
 						hadOpen = true;
 						users.db.close();
 					});
