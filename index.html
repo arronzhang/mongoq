@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="author" content="zzdhidden">
+  <meta name="author" content="Caio Ribeiro Pereira">
+  <meta name="description" content="Mongoq - A Simple and Easy MongoDB Module for Node.js @ GitHub">
+  <meta name="keywords" content="MongoQ, MongoDB, Node.js, Module, Database">
+  <title>Mongoq - A Simple and Easy MongoDB Module for Node.js @ GitHub</title>
+  <style type="text/css">
+    body {
+      margin-top: 1.0em;
+      background-color: #ECF5D2;
+      font-family: Helvetica, Arial, FreeSans, san-serif;
+      color: #000;
+    }
+    #container {
+	  background-color: #fefefe;
+      margin: 0 auto;
+      width: 700px;
+	  border: 5px #537827 solid;
+	  border-radius: 10px;
+	  -moz-border-radius: 10px;
+	  -o-border-radius: 10px;
+	  -webkit-border-radius: 10px;
+	  -ms-border-radius: 10px;
+	  padding: 30px;
+    }
+    h1 { font-size: 3.8em; color: #000000; margin-bottom: 3px; }
+    small { font-size: 0.4em; }
+    h1 a { text-decoration: none }
+    h2 { font-size: 1.5em; color: #000000; }
+    h3 { text-align: center; color: #000000; }
+    a { color: #000000; }
+    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+	.comment {color:aqua;}
+	.coding {
+		width: 96%; 
+		background-color:#537827; 
+		padding: 10px;
+		border: 1px solid #aaa;
+		border-radius: 10px;
+		-moz-border-radius: 10px;
+		-o-border-radius: 10px;
+		-webkit-border-radius: 10px;
+	  	-ms-border-radius: 10px;
+	}
+    code { background: #537827; color: #fff; padding: 3px;}
+    hr { border: 0; width: 100%; border: 1px solid #537827}
+	header{text-align:center;margin:0 auto;}
+    footer { text-align:center; padding-top:30px; font-style: italic; }
+  </style>
+</head>
+<body>
+  <a href="https://github.com/zzdhidden/mongoq"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+  <div id="container">
+	<header>
+	  <img src="https://github.com/caio-ribeiro-pereira/mongoq/raw/gh-pages/mongoq-logo.png" width="256" height="256" border="0"><br>
+	  <strong>A Simple and Easy MongoDB Module for Node.js</strong><br>
+      <small>by <a href="https://github.com/zzdhidden">zzdhidden</a></small>
+	</header>
+	  <hr>
+      <div class="description">
+		  <p>Use mongoDB like this:</p> 
+	      <p><code>mongoq("db").collection("user").find().toArray(function(err, res){});</code></p>
+	      <p>Base on <a href="https://github.com/christkv/node-mongodb-native" target="_blank" title="Node MongoDB Native">node-mongodb-native</a></p>
+      </div>
+    
+      <h2>Install</h2>
+      <code>npm install mongoq</code>
+    
+	  <h2>Features</h2>
+	  <ul>
+		<li>Standard connection string format</li>
+		<li>Full node-mongodb-native methods and events supports</li>
+		<li>Chainable API</li>
+	  </ul>
+	
+	  <h2>Documentation</h2>
+		<h3>Connecting to the database</h3>
+		<div class="coding">
+	  		<code><span class="comment">// Providing a simple connection string:</span><br>
+		  	var mongoq = require("mongoq");<br>
+		  	<span class="comment">// Use default server localhost:27017, auto_reconnect false, poolSize 1</span><br>
+		  	var db = mongoq("testdb");<br>
+			<span class="comment">// Using options</span><br>
+			db = mongoq("testdb", {auto_reconnect: true, host: "127.0.0.1", port: "27017"});<br>
+			<span class="comment">// Connection string</span><br>
+			db = mongoq("mongodb://localhost/testdb");<br>
+			<span class="comment">// Connect and login to the "testdb" database as user "admin" with passowrd "foobar"</span><br>
+			db = mongoq("mongodb://admin:foobar@localhost:27017/testdb?auto_reconnect=true;poolSize=2");<br>
+			<span class="comment">//Repl set servers</span><br>
+			db = mongoq("mongodb://admin:foobar@localhost:27017,localhost:27018/testdb?reconnectWait=2000;retries=20");<br>
+			<span class="comment">//Add user</span><br>
+			db.addUser("admin", "foobar", function(err) {});<br>
+		  	</code>
+		</div>
+		
+		<h3>Database methods</h3>
+		<div class="coding">
+	  		<code>
+				<ul>
+					<li>close(callback)</li>
+					<li>admin(callback)</li>
+					<li>collectionNames(collectionName?, callback)</li>
+					<li>collection(collectionName, options?, callback)</li>
+					<li>collections(callback)</li>
+					<li>dereference(dbRef, callback)</li>
+					<li>logout(options, callback) <span class="comment">// Logout user from server, Fire off on all connections and remove all auth info</span></li>
+					<li>authenticate(username, password, callback)</li>
+					<li>addUser(username, password, callback)</li>
+					<li>removeUser(username, callback)</li>
+					<li>createCollection(collectionName, options?, callback)</li>
+					<li>dropCollection(collectionName, callback)</li>
+					<li>renameCollection(fromCollection, toCollection, callback)</li>
+					<li>lastError(options, connectionOptions, callback)</li>
+					<li>error(options, callback)</li>
+					<li>lastStatus(callback)</li>
+					<li>previousErrors(callback)</li>
+					<li>executeDbCommand(commandHash, options?, callback)</li>
+					<li>executeDbAdminCommand(commandHash, callback)</li>
+					<li>resetErrorHistory(callback)</li>
+					<li>createIndex(collectionName, fieldOrSpec, options?, callback) <span class="comment">// Create an index on a collection</span></li>
+					<li>ensureIndex(collectionName, fieldOrSpec, options?, callback) <span class="comment">// Ensure index, create an index if it does not exist</span></li>
+					<li>dropIndex(collectionName, indexName, callback) <span class="comment"> //Drop Index on a collection</span></li>
+					<li>indexInformation(collectionName, options..., callback)</li>
+					<li>dropDatabase(callback)</li>
+					<li>cursorInfo(callback) <span class="comment">// Fetch the cursor information</span></li>
+					<li>executeCommand(dbCommand, options, callback)</li>
+				</ul>
+		  	</code>
+		</div>
+		
+		<h3>Database events</h3>
+		<div class="coding">
+	  		<code>
+				<ul>
+					<li>close</li>
+					<li>error</li>
+					<li>timeout</li>
+				</ul>
+		  	</code>
+		</div>
+
+		<h3>Collections methods</h3>
+		<div class="coding">
+	  		<code>
+				<ul>
+					<li>insert(docs, options?, callback?)</li>
+					<li>remove(selector?, options?, callback?)</li>
+					<li>rename(newName, callback)</li>
+					<li>insertAll(docs, options?, callback?)</li>
+					<li>save(doc, options?, callback?)</li>
+					<li>update(selector, document, options?, callback?) <span class="comment">// options: upsert, multi, safe</span></li>
+					<li>distinct(key, query?, callback?)</li>
+					<li>count(query?, callback)</li>
+					<li>drop(callback)</li>
+					<li>findAndModify(query, sort, doc, options?, callback?) <span class="comment">// options: remove, unshift, new</span></li>
+					<li>find() <span class="comment">// return Cursor</span></li>
+					<li>findOne(queryObject, options?, callback)</li>
+					<li>createIndex(fieldOrSpec, options, callback?)</li>
+					<li>ensureIndex(fieldOrSpec, options, callback?)</li>
+					<li>indexInformation(options, callback)</li>
+					<li>dropIndex(name, callback)</li>
+					<li>dropIndexes(callback)</li>
+					<li>mapReduce(map, reduce, options, callback)</li>
+					<li>group(keys, condition, initial, reduce, command, callback)</li>
+					<li>options(callback)</li>
+				</ul>
+		  	</code>
+		</div>
+		
+		<h3>Collection example</h3>
+		<div class="coding">
+	  		<code>
+				var mongoq = require("mongoq");<br>
+				var db = mongoq("mongodb://localhost/testdb");<br>
+				var users = db.collection("users");<br>
+				users.insert({name: "Jack", phone: 1234567, email: "jake@mail.com"});<br>
+		  	</code>
+		</div>
+
+		<h3>Cursor methods</h3>
+		<div class="coding">
+	  		<code>
+				<ul>
+					<li>toArray(callback)</li>
+					<li>each(callback)</li>
+					<li>count(callback)</li>
+					<li>sort(keyOrList, direction) <span class="comment">//=> this</span></li>
+					<li>limit(limit) <span class="comment">//=> this</span></li>
+					<li>skip(limit) <span class="comment">//=> this</span></li>
+					<li>batchSize(limit) <span class="comment">//=> this</span></li>
+					<li>nextObject(callback)</li>
+					<li>getMore(callback)</li>
+					<li>explain(callback)</li>
+				</ul>
+		  	</code>
+		</div>
+		
+		<h3>Cursor example</h3>
+		<div class="coding">
+	  		<code>
+				var mongoq = require("mongoq");<br>
+				var db = mongoq("mongodb://localhost/testdb");<br>
+				var users = db.collection("users");<br>
+				var cursor = users.find();<br>
+				cursor.toArray(function(err, users){<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;db.close();<br>
+				});<br>
+		  	</code>
+		</div>
+	  
+	  <h2>Authors</h2>
+      <p>Hidden (<a href="mailto:zzdhidden@gmail.com" target="_blank">zzdhidden@gmail.com</a>)</p>
+
+      <h2>Contributor</h2>
+      <p>Caio Ribeiro Pereira (<a href="mailto:caio.ribeiro.pereira@gmail.com" target="_blank">caio.ribeiro.pereira@gmail.com</a>)</p>
+
+      <h2>Download</h2>
+      <p>
+          You can download this project in either
+          <a href="https://github.com/zzdhidden/mongoq/zipball/master">zip</a> or
+          <a href="https://github.com/zzdhidden/mongoq/tarball/master">tar formats.
+      </p>
+      <p>You can also clone the project with <a href="http://git-scm.com">Git</a> by running:</p>
+      <code>$ git clone git://github.com/zzdhidden/mongoq</code>
+			  
+      <h2>License</h2>
+      <h3>The MIT License</h3>
+      <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+      <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+      <p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      <p>Copyright (c) 2011 <a href="mailto:zzdhidden@gmail.com" target="_blank">hidden</a></p>
+    
+    <footer>
+      Get the source code on GitHub : <a href="https://github.com/zzdhidden/mongoq">zzdhidden/mongoq</a>
+    </footer>
+  </div>
+
+</body>
+</html>
