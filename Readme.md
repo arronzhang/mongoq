@@ -31,17 +31,17 @@ Provide a simple [connection string](http://www.mongodb.org/display/DOCS/Connect
 
 >     var mongoq = require("mongoq");
 >
->     //use default server localhost:27017, auto_reconnect false, poolSize 1
+>     //use default server localhost:27017, poolSize 1
 >     var db = mongoq("testdb"); 
 >
 >     //use options
->     db = mongoq("testdb", {auto_reconnect: true, host: "127.0.0.1", port: "27017"}); 
+>     db = mongoq("testdb", {host: "127.0.0.1", port: "27017"}); 
 >
 >     //connection string
 >     db = mongoq("mongodb://localhost/testdb"); 
 >
 >     // Connect and login to the "testdb" database as user "admin" with passowrd "foobar"
->     db = mongoq("mongodb://admin:foobar@localhost:27017/testdb?auto_reconnect=true;poolSize=2");
+>     db = mongoq("mongodb://admin:foobar@localhost:27017/testdb?poolSize=2");
 >
 >     //Repl set servers
 >     db = mongoq("mongodb://admin:foobar@localhost:27017,localhost:27018/testdb?reconnectWait=2000;retries=20");
