@@ -1,5 +1,5 @@
 
-var mongoq = require('mongoq')
+var mongoq = require('../index.js')
 , should = require('should');
 
 var colnum = 1;
@@ -156,6 +156,26 @@ module.exports = {
 			hadOpen.should.be.true;
 		});
 
+	}
+	, "test insert push": function(beforeExit) {
+		var users = mongoq("mongoqTest").collection("users" + (colnum++))
+		, hadOpen = false;
+		users.drop(function() {
+			users.insert({name: "jack", childrens: ["Lucy"]}, function() {
+				users.update({name: "jack"}, {$push: {childrens: "Lili" }}, function() {
+					users.findOne({name: "jack"}, function(err, user) {
+						should.exist( user );
+						user.childrens.should.have.length( 2 );
+						user.childrens[1].should.equal("Lili");
+						users.db.close();
+						hadOpen = true;
+					});
+				});
+			});
+		});
+		beforeExit(function() {
+			hadOpen.should.be.true;
+		});
 	}
 };
 

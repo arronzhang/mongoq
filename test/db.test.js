@@ -1,5 +1,5 @@
 
-var mongoq = require('mongoq')
+var mongoq = require('../index.js')
 , should = require('should');
 
 module.exports = {
@@ -19,12 +19,12 @@ module.exports = {
 		server.reconnectWait.should.equal(2000);
 		server.retries.should.equal(20);
 		server1.host.should.eql("localhost");
-		server1.port.should.eql("27017");
+		server1.port.should.eql(27017);
 		server1.autoReconnect.should.be.false;
 		server1.poolSize.should.equal(1);
 
 		server2.host.should.eql("localhost");
-		server2.port.should.eql("27018");
+		server2.port.should.eql(27018);
 
 		db = mongoq("mongodb:\/\/127.0.0.1:27018/mongoqTest?auto_reconnect&poolSize=2");
 		options = db.options;
@@ -35,7 +35,7 @@ module.exports = {
 		server.autoReconnect.should.be.true;
 		server.poolSize.should.equal( 2 );
 		server.host.should.equal("127.0.0.1");
-		server.port.should.eql("27018");
+		server.port.should.eql(27018);
 
 		db = mongoq("mongodb:\/\/127.0.0.1:27018/mongoqTest?auto_reconnect=false");
 		options = db.options;
@@ -52,14 +52,14 @@ module.exports = {
 		server.poolSize.should.equal( 1 );
 
 		server.host.should.equal("localhost");
-		server.port.should.eql("27017");
+		server.port.should.eql(27017);
 		server.autoReconnect.should.be.true;
 		db.name.should.eql("mongoqTest");
 
 		db = mongoq("mongoqTest", {auto_reconnect: true, host: "127.0.0.1", port: "1233"});
 		server = db.server;
 		server.host.should.equal("127.0.0.1");
-		server.port.should.eql("1233");
+		server.port.should.eql(1233);
 	}
 
 	, "test db events[error,close,timeout]": function(beforeExit) {
@@ -79,6 +79,8 @@ module.exports = {
 			db.close();
 		});
 		db2.on("error", function() {
+			error = true;
+		}).on("close", function() {
 			error = true;
 		})
 		.open(function(err) {

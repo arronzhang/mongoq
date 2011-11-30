@@ -6,7 +6,7 @@
   , "author" : "Hidden <zzdhidden@gmail.com>"
   , "repository" : { "type" :  "git", "url" : "http://github.com/zzdhidden/mongoq.git" }
   , "dependencies": { "mongodb" : ">=0.9.1", "jquery-deferred": ">=0.1.0" }
-  , "devDependencies": { "expresso" : ">=0.7.0", "should": ">=0.2.1" }
+  , "devDependencies": { "expresso" : ">=0.9.2", "should": ">=0.2.1" }
   , "main": "index"
   , "engines": { "node": ">=0.4.0" }
 }

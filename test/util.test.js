@@ -1,5 +1,5 @@
 
-var mongoq = require('mongoq')
+var mongoq = require('../index.js')
 , util = mongoq.util
 , should = require('should');
 

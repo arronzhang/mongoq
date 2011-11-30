@@ -1,5 +1,5 @@
 
-var mongoq = require('mongoq')
+var mongoq = require('../index.js')
 , should = require('should');
 
 module.exports = {
