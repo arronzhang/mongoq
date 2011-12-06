@@ -1,12 +1,21 @@
 {
-    "name": "mongoq"
-  , "version": "0.1.7"
-  , "description": "Use mongoDB like this: require('mongoq')('testdb').collection('users').find(function(err, cursor){});"
-  , "keywords": ["mongodb", "mongoq", "data", "datastore", "nosql"]
-  , "author" : "Hidden <zzdhidden@gmail.com>"
-  , "repository" : { "type" :  "git", "url" : "http://github.com/zzdhidden/mongoq.git" }
-  , "dependencies": { "mongodb" : ">=0.9.1", "jquery-deferred": ">=0.1.0" }
-  , "devDependencies": { "expresso" : ">=0.9.2", "should": ">=0.2.1" }
-  , "main": "index"
-  , "engines": { "node": ">=0.4.0" }
+	"name": "mongoq"
+	, "version": "0.1.8"
+	, "description": "Use mongoDB like this: require('mongoq')('testdb').collection('users').find(function(err, cursor){});"
+	, "keywords": ["mongodb", "mongoq", "data", "datastore", "nosql"]
+	, "author" : "Hidden <zzdhidden@gmail.com>"
+	, "repository" : { 
+		"type" :  "git", 
+		"url" : "http://github.com/zzdhidden/mongoq.git" 
+	}
+	, "dependencies": { 
+		"mongodb" : ">=0.9.1"
+		, "jquery-deferred": ">=0.1.0" 
+	}
+	, "devDependencies": { 
+		"expresso" : ">=0.9.2"
+		, "should": ">=0.2.1" 
+	}
+	, "main": "index"
+	, "engines": { "node": ">=0.4.0" }
 }
