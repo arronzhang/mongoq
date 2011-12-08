@@ -16,7 +16,6 @@ module.exports = {
 					_users.should.have.length( 2 );
 					//Deferred not supports find().each()
 					users.find().each().done(function(user) {
-						console.log(user);
 						users.db.close();
 					});
 				});
