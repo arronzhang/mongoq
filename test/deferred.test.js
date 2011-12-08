@@ -7,14 +7,18 @@ module.exports = {
 			, hadOpen = false;
 
 		users.drop(function() {
-			users.insert({name: "jack"}).done(function(_users) {
+			users.insert([{name: "jack"}, {name: "lucy"}]).done(function(_users) {
 				users.find().toArray().done(function(_users) {
 					should.exist( _users );
-					_users.should.have.length( 1 );
+					_users.should.have.length( 2 );
 					hadOpen = true;
 				}).done(function(_users) {
-					_users.should.have.length( 1 );
-					users.db.close();
+					_users.should.have.length( 2 );
+					//Deferred not supports find().each()
+					users.find().each().done(function(user) {
+						console.log(user);
+						users.db.close();
+					});
 				});
 			});
 		});
