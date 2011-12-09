@@ -1,9 +1,11 @@
 
 var mongoq = require('../index.js')
-, should = require('should');
+	, should = require('should');
 
-module.exports = {
-	'test .version': function(){
+describe("mongoq", function() {
+
+	it( 'test .version', function(){
 		mongoq.version.should.match(/^\d+\.\d+\.\d+$/);
-	}
-};
+	});
+
+});

@@ -2,9 +2,8 @@
 test:
 	@echo "Please start mongodb[localhost:27017] at first."
 	@echo "Test mongoq"
-	@NODE_ENV=test ./node_modules/.bin/expresso \
-		-I lib \
-		test/*.test.js
+	@NODE_ENV=test ./node_modules/.bin/mocha --slow 20 --growl \
+		./test/*.test.js
 
 docs: docs/api.html
 

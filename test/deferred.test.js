@@ -1,8 +1,8 @@
 var mongoq = require('../index.js')
 	, should = require('should');
 
-module.exports = {
-	"test find": function( beforeExit ){
+describe("deferred", function() {
+	it("should return a promise object when find", function( done ){
 		var users = mongoq("mongoqTest", {auto_reconnect: true}).collection("users23424")
 			, hadOpen = false;
 
@@ -16,16 +16,15 @@ module.exports = {
 					_users.should.have.length( 2 );
 					//Deferred not supports find().each()
 					users.find().each().done(function(user) {
-						users.db.close();
+
+						hadOpen.should.be.true;
+						users.db.close(done);
+
 					});
 				});
 			});
 		});
 
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
-
-	}
-};
+	});
+});
 

@@ -3,8 +3,8 @@ var mongoq = require('../index.js')
 , util = mongoq.util
 , should = require('should');
 
-module.exports = {
-	'test util parseArgs': function(){
+describe( "util", function() {
+	it( 'test util parseArgs', function(){
 		(function() {
 			var args = util.parseArgs(arguments);
 			args.all.should.have.length(3);
@@ -23,5 +23,6 @@ module.exports = {
 			args.callback.should.have.an.instanceof(Function);
 		})(1,2,3, function() {
 		});
-	}
-};
+	});
+
+});

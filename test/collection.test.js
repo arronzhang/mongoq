@@ -3,9 +3,8 @@ var mongoq = require('../index.js')
 , should = require('should');
 
 var colnum = 1;
-
-module.exports = {
-	"test collection options": function(beforeExit) {
+describe("collection", function() {
+	it("test collection options", function(done) {
 		var users = mongoq("mongoqTest", {auto_reconnect: true}).collection("users", {slaveOk: false})
 		, hadOpen = false;
 		users.drop(function() {
@@ -15,15 +14,11 @@ module.exports = {
 				users.hint = {name: true};
 				should.exist( originalCol.hint );
 				originalCol.hint.name.should.be.true;
-				hadOpen = true;
-				users.db.close();
+				users.db.close(done);
 			});
 		});
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
-	}
-	, "test inherit methods": function(beforeExit) {
+	});
+	it( "test inherit methods", function(done) {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
@@ -35,15 +30,12 @@ module.exports = {
 					user.phone.should.be.equal(1234567);
 					user._id.should.be.ok;
 					hadOpen = true;
-					users.db.close();
+					users.db.close(done);
 				});
 			});		
 		});
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
-	}
-	, "test find": function(beforeExit) {
+	});
+	it( "test find", function(done) {
 		var db = mongoq("mongoqTest")
 		, colname = "users" + (colnum++)
 		, users = db.collection(colname)
@@ -67,7 +59,7 @@ module.exports = {
 						user._id.should.be.ok;
 						users.find(function(err, cursor){
 							hadOpen2 = true;
-							db.close();
+							db.close(done);
 						});
 					});
 				});
@@ -78,14 +70,8 @@ module.exports = {
 		db.on("open", function() {
 			num ++;
 		});
-
-		beforeExit(function() {
-			hadOpen.should.be.true;
-			hadOpen2.should.be.true;
-			num.should.be.equal(2);
-		});
-	}
-	, "test findItems": function(beforeExit) {
+	});
+	it( "test findItems", function(done) {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
@@ -99,15 +85,12 @@ module.exports = {
 					user.name.should.be.eql("Jack");
 					user.phone.should.be.equal(1234567);
 					user._id.should.be.ok;
-					users.db.close();
+					users.db.close(done);
 				});
 			});
 		});
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
-	}
-	, "test cursor": function(beforeExit) {
+	});
+	it( "test cursor", function(done) {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
@@ -121,15 +104,12 @@ module.exports = {
 					user.name.should.be.eql("Lucy");
 					user.phone.should.be.equal(123);
 					user._id.should.be.ok;
-					users.db.close();
+					users.db.close(done);
 				});
 			});
 		});
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
-	}
-	, "test group": function(beforeExit) {
+	});
+	it( "test group", function(done) {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
@@ -147,17 +127,14 @@ module.exports = {
 						docs[0].count.should.be.equal(1);
 						docs[0].sex.should.be.equal("male");
 						hadOpen = true;
-						users.db.close();
+						users.db.close(done);
 					});
 				});
 			});
 		});
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
+	});
 
-	}
-	, "test insert push": function(beforeExit) {
+	it( "test insert push", function(done) {
 		var users = mongoq("mongoqTest").collection("users" + (colnum++))
 		, hadOpen = false;
 		users.drop(function() {
@@ -167,15 +144,11 @@ module.exports = {
 						should.exist( user );
 						user.childrens.should.have.length( 2 );
 						user.childrens[1].should.equal("Lili");
-						users.db.close();
-						hadOpen = true;
+						users.db.close( done );
 					});
 				});
 			});
 		});
-		beforeExit(function() {
-			hadOpen.should.be.true;
-		});
-	}
-};
+	});
+});
 
