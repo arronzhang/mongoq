@@ -182,8 +182,6 @@ MongoQ introduce into jQuery Deferred since v0.2, you can find more documents ab
 
 MongoQ make all mongodb asynchronous processes to return with a Promise Object.
 
-*Notice*: Please don't use `find().each().done(...`, the callbacks will be called only once.
-
 >     var mongoq = require("mongoq");
 >     var db = mongoq("mongodb://localhost/testdb"); 
 >     var users = db.collection("users");
@@ -209,6 +207,9 @@ methods
 *	fail( failCallbacks [, failCallbacks] ) //=> Add handlers to be called when the Deferred object is rejected.
 *	then( doneCallbacks, failCallbacks ) //=> Add handlers to be called when the Deferred object is resolved or rejected.
 *	always( alwaysCallbacks ) //=> Add handlers to be called when the Deferred object is either resolved or rejected.
+
+
+**Notice**: Please don't use `find().each().done(...`, the callbacks will be called only once.
 
 
 ###Control-flow
