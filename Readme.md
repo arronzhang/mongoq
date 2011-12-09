@@ -182,6 +182,8 @@ MongoQ introduce into jQuery Deferred since v0.2, you can find more documents ab
 
 MongoQ make all mongodb asynchronous processes to return with a Promise Object.
 
+*Notice*: Please don't use `find().each().done(...`, the callbacks will be called only once.
+
 >	var mongoq = require("mongoq");
 >	var db = mongoq("mongodb://localhost/testdb"); 
 >	var users = db.collection("users");
