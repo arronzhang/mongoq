@@ -175,6 +175,8 @@ methods
 *	getMore(callback)
 *	explain(callback)
 
+<a name="mongoq"></a>
+
 MongoQ style
 -----------------------------
 
