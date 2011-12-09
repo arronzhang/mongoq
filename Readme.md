@@ -2,7 +2,7 @@
 MongoQ
 ============================
 
-Use mongoDB like this: mongoq("testdb").collection("users").find().toArray().done(function(docs){ }).fail(function(err){ });
+Use mongoDB like this: `mongoq("testdb").collection("users").find().toArray().done( function(docs){} ).fail( function(err){} )`;
 
 Base on [node-mongodb-native][mongodb-native]
 
