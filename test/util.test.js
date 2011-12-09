@@ -25,7 +25,7 @@ describe( "util", function() {
 		});
 	});
 
-	describe( "next", function() {
+	describe( "and", function() {
 		var successPromise = function(val) {
 			var dfd = util.Deferred();
 			var args = [].slice.call( arguments, 0 );
@@ -33,7 +33,7 @@ describe( "util", function() {
 				dfd.resolve.apply( dfd, args );
 			} ,40 );
 			var p = dfd.promise();
-			p.next = util.next;
+			p.and = util.and;
 			return p;
 		}
 		, failPromise = function(val) {
@@ -42,19 +42,19 @@ describe( "util", function() {
 				dfd.reject( val );
 			} ,40 );
 			var p = dfd.promise();
-			p.next = util.next;
+			p.and = util.and;
 			return p;
 		};
 
-		it( "should success to next", function( done ) {
-			util.next( successPromise("v1") )
-				.next( function(v1) {
+		it( "should success and", function( done ) {
+			util.and( successPromise("v1") )
+				.and( function(v1) {
 					return successPromise( "v2", "v21" );
 				})
-				.next( function(v1, v2) {
+				.and( function(v1, v2) {
 					return successPromise( );
 				})
-				.next( function(v1, v2, v3) {
+				.and( function(v1, v2, v3) {
 					return successPromise( "v4", "v41" );
 				})
 				.done( function(v1, v2, v3, v4) {
@@ -71,12 +71,12 @@ describe( "util", function() {
 		} );
 
 		it( "should support anything value", function( done ) {
-			util.next()
-				.next( successPromise("v1") )
-				.next( function(v1) {
+			util.and()
+				.and( successPromise("v1") )
+				.and( function(v1) {
 					return successPromise( "v2", "v21" );
 				})
-				.next( "v3" )
+				.and( "v3" )
 				.done( function(v1, v2, v3) {
 					v1.should.be.equal("v1");
 					v2.should.be.eql(["v2", "v21"]);
@@ -89,15 +89,15 @@ describe( "util", function() {
 				} );
 		} );
 
-		it( "should have next method", function( done ) {
+		it( "should have and method", function( done ) {
 			successPromise("v1")
-				.next( function(v1) {
+				.and( function(v1) {
 					return successPromise( "v2" );
 				})
-				.next( function(v1, v2) {
+				.and( function(v1, v2) {
 					return successPromise( "v3" );
 				})
-				.next( function(v1, v2, v3) {
+				.and( function(v1, v2, v3) {
 					return successPromise( "v4" );
 				})
 				.done( function(v1, v2, v3, v4) {
@@ -115,10 +115,10 @@ describe( "util", function() {
 
 		it( "should support failed message", function( done ) {
 			successPromise("v1")
-				.next( function(v1) {
+				.and( function(v1) {
 					return successPromise( "v2" );
 				})
-				.next( function(v1, v2) {
+				.and( function(v1, v2) {
 					return failPromise( "e3" );
 				})
 				.done( function(v1, v2, v3) {
@@ -132,10 +132,10 @@ describe( "util", function() {
 
 		it( "should support failed message return", function( done ) {
 			successPromise("v1")
-				.next( function(v1) {
+				.and( function(v1) {
 					return successPromise( "v2" );
 				})
-				.next( function(v1, v2) {
+				.and( function(v1, v2) {
 					return new Error( "e3" );
 				})
 				.done( function(v1, v2, v3) {
@@ -149,10 +149,10 @@ describe( "util", function() {
 
 		it( "should support throw error", function( done ) {
 			successPromise("v1")
-				.next( function(v1) {
+				.and( function(v1) {
 					return successPromise( "v2" );
 				})
-				.next( function(v1, v2) {
+				.and( function(v1, v2) {
 					throw new Error("e3");
 				})
 				.done( function(v1, v2, v3) {
@@ -165,7 +165,7 @@ describe( "util", function() {
 		} );
 
 		it( "should multi arguments", function( done ) {
-			util.next( 
+			util.and( 
 				successPromise("v1")
 				, function(v1) {
 					return successPromise( "v2", "v21" );
