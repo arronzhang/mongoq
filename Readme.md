@@ -184,24 +184,24 @@ MongoQ make all mongodb asynchronous processes to return with a Promise Object.
 
 *Notice*: Please don't use `find().each().done(...`, the callbacks will be called only once.
 
->	var mongoq = require("mongoq");
->	var db = mongoq("mongodb://localhost/testdb"); 
->	var users = db.collection("users");
->	users.find().toArray()
->	    .done( function( docs ) { 
->	        //=> users
->	    } )
->	    .done( function( docs ) { 
->	        //=> users
->	    } )
->	    .fail( function( error ) { 
->	        //=> error
->	    } )
->	    .then( function( docs ) { 
->	        //=> users
->	    }, function( error ) { 
->	        //=> error
->	    } );
+>     var mongoq = require("mongoq");
+>     var db = mongoq("mongodb://localhost/testdb"); 
+>     var users = db.collection("users");
+>     users.find().toArray()
+>         .done( function( docs ) { 
+>             //=> users
+>         } )
+>         .done( function( docs ) { 
+>             //=> users
+>         } )
+>         .fail( function( error ) { 
+>             //=> error
+>         } )
+>         .then( function( docs ) { 
+>             //=> users
+>         }, function( error ) { 
+>             //=> error
+>         } );
 
 methods
 
@@ -215,21 +215,21 @@ methods
 
 MongoQ add a method called `and` to the Promise Object for the mongodb's parallel execution, serial execution and error handling painless.
 
->	var mongoq = require("mongoq");
->	var db = mongoq("mongodb://localhost/testdb"); 
->	var users = db.collection("users");
->	var messages = db.collection("messages");
->	users.count()
->	    .and( users.findOne() ) // parallel
->	    .and( function( user ) { // serial when in function
->	        return user ? messages.find({ user: user._id }).toArray() : [];
->	    } )
->	    .done( function( num, user, msgs ) {
->	        //num from users.count
->	        //user from users.findOne
->	        //msgs from messages.find
->	    } )
->	    .fail( function( err ) {} );
+>     var mongoq = require("mongoq");
+>     var db = mongoq("mongodb://localhost/testdb"); 
+>     var users = db.collection("users");
+>     var messages = db.collection("messages");
+>     users.count()
+>         .and( users.findOne() ) // parallel
+>         .and( function( user ) { // serial when in function
+>             return user ? messages.find({ user: user._id }).toArray() : [];
+>         } )
+>         .done( function( num, user, msgs ) {
+>             //num from users.count
+>             //user from users.findOne
+>             //msgs from messages.find
+>         } )
+>         .fail( function( err ) {} );
 
 
 License 
