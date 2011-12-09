@@ -2,7 +2,7 @@
 MongoQ
 ============================
 
-Use mongoDB like this: mongoq("testdb").collection("users").find().toArray(function(err, users){});
+Use mongoDB like this: mongoq("testdb").collection("users").find().toArray().done(function(docs){ }).fail(function(err){ });
 
 Base on [node-mongodb-native][mongodb-native]
 
@@ -14,7 +14,7 @@ Features
 *	Full [node-mongodb-native][mongodb-native] methods and events supports
 *	Chainable api
 *	Introduce into [jQuery Deferred][jquery-deferred] which is based on the [CommonJS Promises/A][promises-a] design. => v0.2
-*	Control-flow
+*	Control-flow => v0.2
 
 
 Installation
