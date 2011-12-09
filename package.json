@@ -10,7 +10,7 @@
 	}
 	, "dependencies": { 
 		"mongodb" : ">=0.9.1"
-		, "jquery-deferred": ">=0.1.0" 
+		, "jquery-deferred": ">=0.2.0" 
 	}
 	, "devDependencies": { 
 		"mocha" : "*"
