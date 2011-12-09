@@ -1,5 +1,5 @@
 
-mongoq
+MongoQ
 ============================
 
 Use mongoDB like this: mongoq("testdb").collection("users").find().toArray(function(err, users){});
@@ -10,15 +10,48 @@ Base on [node-mongodb-native][mongodb-native]
 Features
 -----------------------------
 
-*	Standard connection string format
+*	Standard [connection string format][connection string]
 *	Full [node-mongodb-native][mongodb-native] methods and events supports
 *	Chainable api
+*	Introduce into [jQuery Deferred][jquery-deferred] which is based on the [CommonJS Promises/A][promises-a] design. => v0.2
+*	Control-flow
 
 
 Installation
 -----------------------------
 
 >     npm install mongoq
+
+Example
+-----------------------------
+
+>	var assert = require("assert")
+>		, mongoq = require("../index.js")
+>		, db = mongoq("mongodb://127.0.0.1:27017/mongoqTest")
+>		, User = db.collection("users");
+>	
+>	User.remove() //clear test date
+>		.done( function() {
+>			User.insert( [{ _id: 1, name: "Jack", age: 22 }, { _id: 2, name: "Lucy", age: 20 }] ) //Add Jack and Lucy
+>				.and( User.insert( { _id: 3, name: "Mike", age: 21 } ) ) //Add Mike synchronous
+>				.and( function(u1, u2) {
+>					// Will find after add Jack, Lucy and Mike
+>					return User.findOne( { name: u2[0]["name"] } )
+>				} )
+>				.done( function(u1, u2, u3) { //All be done
+>					assert.deepEqual( u1, [{ _id: 1, name: "Jack", age: 22 }, { _id: 2, name: "Lucy", age: 20 }], "Insert first" );
+>					assert.deepEqual( u2, [{ _id: 3, name: "Mike", age: 21 }], "insert second" );
+>					assert.deepEqual( u3, { _id: 3, name: "Mike", age: 21 }, "Find after insert" );
+>					db.close();
+>				} )
+>				.fail( function( err ) { // Any error occur
+>					console.log( err );
+>				} );
+>		} )
+>		.fail( function( err ) { // Faild to remove
+>			console.log( err );
+>		} );
+>	
 
 Work like node-mongodb-native
 -----------------------------------------
@@ -27,7 +60,7 @@ Mongoq bridge all the methods and events from [mongodb native database][mongodb-
 
 ###Database
 
-Provide a simple [connection string](http://www.mongodb.org/display/DOCS/Connections)
+Provide a simple [connection string][connection string]
 
 >     var mongoq = require("mongoq");
 >
@@ -140,7 +173,65 @@ methods
 *	getMore(callback)
 *	explain(callback)
 
-## License 
+MongoQ style
+-----------------------------
+
+###Deferred Object
+
+MongoQ introduce into jQuery Deferred since v0.2, you can find more documents about jQuery Deferred Object at [here][jquery-deferred].
+
+MongoQ make all mongodb asynchronous processes to return with a Promise Object.
+
+>	var mongoq = require("mongoq");
+>	var db = mongoq("mongodb://localhost/testdb"); 
+>	var users = db.collection("users");
+>	users.find().toArray()
+>	    .done( function( docs ) { 
+>	        //=> users
+>	    } )
+>	    .done( function( docs ) { 
+>	        //=> users
+>	    } )
+>	    .fail( function( error ) { 
+>	        //=> error
+>	    } )
+>	    .then( function( docs ) { 
+>	        //=> users
+>	    }, function( error ) { 
+>	        //=> error
+>	    } );
+
+methods
+
+*	done( doneCallbacks [, doneCallbacks] ) //=> Add handlers to be called when the Deferred object is resolved.
+*	fail( failCallbacks [, failCallbacks] ) //=> Add handlers to be called when the Deferred object is rejected.
+*	then( doneCallbacks, failCallbacks ) //=> Add handlers to be called when the Deferred object is resolved or rejected.
+*	always( alwaysCallbacks ) //=> Add handlers to be called when the Deferred object is either resolved or rejected.
+
+
+###Control-flow
+
+MongoQ add a method called `and` to the Promise Object for the mongodb's parallel execution, serial execution and error handling painless.
+
+>	var mongoq = require("mongoq");
+>	var db = mongoq("mongodb://localhost/testdb"); 
+>	var users = db.collection("users");
+>	var messages = db.collection("messages");
+>	users.count()
+>	    .and( users.findOne() ) // parallel
+>	    .and( function( user ) { // serial when in function
+>	        return user ? messages.find({ user: user._id }).toArray() : [];
+>	    } )
+>	    .done( function( num, user, msgs ) {
+>	        //num from users.count
+>	        //user from users.findOne
+>	        //msgs from messages.find
+>	    } )
+>	    .fail( function( err ) {} );
+
+
+License 
+-----------------------------
 
 (The MIT License)
 
@@ -169,3 +260,6 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 [mongodb-native]: https://github.com/christkv/node-mongodb-native
 [mongodb-native-database]: https://github.com/christkv/node-mongodb-native/blob/master/docs/database.md
 [mongodb-native-collections]: https://github.com/christkv/node-mongodb-native/blob/master/docs/collections.md
+[promises-a]: http://wiki.commonjs.org/wiki/Promises/A
+[jquery-deferred]: http://api.jquery.com/category/deferred-object/
+[connection-string]: http://www.mongodb.org/display/DOCS/Connections
