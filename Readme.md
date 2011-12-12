@@ -236,6 +236,11 @@ MongoQ add a method called `and` to the Promise Object for the mongodb's paralle
 >         } )
 >         .fail( function( err ) {} );
 
+Contributor
+-----------------------------
+
+* Caio Ribeiro Pereira (caio.ribeiro.pereira@gmail.com)
+
 
 License 
 -----------------------------
