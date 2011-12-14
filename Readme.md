@@ -60,6 +60,14 @@ Work like node-mongodb-native
 
 Mongoq bridge all the methods and events from [mongodb native database][mongodb-native-database] and [mongodb native collections][mongodb-native-collections], and make it chainable.
 
+###Access BSON
+
+>     var mongoq = require("mongoq");
+>
+>     var BSON = mongoq.BSON;
+>     var ObjectID = BSON.ObjectID;
+>
+
 ###Database
 
 Provide a simple [connection string][connection string]
