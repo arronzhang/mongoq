@@ -226,7 +226,9 @@ methods
 
 ###Control-flow
 
-MongoQ add a method called `and` to the Promise Object for the mongodb's parallel execution, serial execution and error handling painless.
+MongoQ add two methods called `and` and `next` to the Promise Object for the mongodb's parallel execution, serial execution and error handling painless.
+
+**and**: run promise object series or parallel and then serialize the result
 
 >     var mongoq = require("mongoq");
 >     var db = mongoq("mongodb://localhost/testdb"); 
@@ -243,6 +245,22 @@ MongoQ add a method called `and` to the Promise Object for the mongodb's paralle
 >             //msgs from messages.find
 >         } )
 >         .fail( function( err ) {} );
+
+**next**: run promise object series then give the result to the next
+
+>     var mongoq = require("mongoq");
+>     var db = mongoq("mongodb://localhost/testdb"); 
+>     var users = db.collection("users");
+>     var messages = db.collection("messages");
+>     users.findOne()
+>         .next( function( user ) { // serial when in function
+>             return user ? messages.find({ user: user._id }).toArray() : [];
+>         } )
+>         .done( function( msgs ) {
+>             //msgs from messages.find
+>         } )
+>         .fail( function( err ) {} );
+
 
 Contributor
 -----------------------------

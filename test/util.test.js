@@ -25,7 +25,7 @@ describe( "util", function() {
 		});
 	});
 
-	describe( "and", function() {
+	describe( "and next", function() {
 		var successPromise = function(val) {
 			var dfd = util.Deferred();
 			var args = [].slice.call( arguments, 0 );
@@ -34,6 +34,7 @@ describe( "util", function() {
 			} ,40 );
 			var p = dfd.promise();
 			p.and = util.and;
+			p.next = util.next;
 			return p;
 		}
 		, failPromise = function(val) {
@@ -43,6 +44,7 @@ describe( "util", function() {
 			} ,40 );
 			var p = dfd.promise();
 			p.and = util.and;
+			p.next = util.next;
 			return p;
 		};
 
@@ -189,6 +191,74 @@ describe( "util", function() {
 					false.should.be.true;
 				});
 		} );
+
+		it( "should success next", function( done ) {
+			util.next( successPromise("v1") )
+				.next( function(v1) {
+					v1.should.be.eql("v1");
+					return successPromise( "v2", "v21" );
+				})
+				.next( function(v2) {
+					v2.should.be.eql(["v2", "v21"]);
+					return successPromise( );
+				})
+				.next( function(v3) {
+					should.not.exist( v3 );
+					return successPromise( "v4", "v41" );
+				})
+				.done( function(v4) {
+					v4.should.be.eql(["v4", "v41"]);
+					arguments.should.have.length( 1 );
+					done();
+				})
+				.fail(function() {
+					false.should.be.true;
+				});
+		} );
+
+		it( "should support throw error with next", function( done ) {
+			successPromise("v1")
+				.next( function(v1) {
+					v1.should.be.eql("v1");
+					return successPromise( "v2" );
+				})
+				.next( function(v2) {
+					v2.should.be.eql("v2");
+					throw new Error("e3");
+				})
+				.done( function(v3) {
+					false.should.be.true;
+				})
+				.fail( function( err ) {
+					err.message.should.be.equal("e3");
+					done();
+				});
+		} );
+
+		it( "should work together", function( done ) {
+			successPromise("v1")
+				.next( function(v1) {
+					v1.should.be.eql("v1");
+					return v1 + "v1";
+				} )
+				.and( successPromise("v2") )
+				.next( function(v1, v2) {
+					v1.should.be.eql("v1v1");
+					v2.should.be.eql("v2");
+					return successPromise(v1 + v2)
+						.and( successPromise( "v3" ) );
+				} )
+				.and( "v4" )
+				.done( function(v3, v4) {
+					v3.should.be.eql([ "v1v1v2", "v3" ]);
+					v4.should.be.eql( "v4" );
+					done();
+				})
+				.fail( function() {
+					false.should.be.true;
+				});
+		} );
+
 
 	} );
 
