@@ -1,21 +1,22 @@
 {
 	"name": "mongoq"
-	, "version": "0.2.2"
-	, "description": "Use mongoDB like this: require('mongoq')('testdb').collection('users').find(function(err, cursor){});"
-	, "keywords": ["mongodb", "mongoq", "data", "datastore", "nosql"]
-	, "author" : "Hidden <zzdhidden@gmail.com>"
-	, "repository" : { 
-		"type" :  "git", 
-		"url" : "http://github.com/zzdhidden/mongoq.git" 
+  , "version": "0.2.3"
+  , "description": "Use mongoDB like this: require('mongoq')('testdb').collection('users').find(function(err, cursor){});"
+  , "keywords": ["mongodb", "mongoq", "data", "datastore", "nosql"]
+  , "author" : "Hidden <zzdhidden@gmail.com>"
+  , "repository" : { 
+	  "type" :  "git", 
+	  "url" : "http://github.com/zzdhidden/mongoq.git" 
 	}
-	, "dependencies": { 
-		"mongodb" : ">=0.9.1"
-		, "jquery-deferred": ">=0.2.0" 
+  , "dependencies": { 
+	  "mongodb" : ">=0.9.1"
+	, "jquery-deferred": ">=0.2.0" 
 	}
-	, "devDependencies": { 
-		"mocha" : "*"
-		, "should": ">=0.2.1" 
+  , "devDependencies": { 
+	  "mocha" : "*"
+	, "connect": "*"
+	, "should": ">=0.2.1" 
 	}
-	, "main": "index"
-	, "engines": { "node": ">=0.4.0" }
+  , "main": "index"
+  , "engines": { "node": ">=0.4.0" }
 }
