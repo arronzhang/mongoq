@@ -13,7 +13,7 @@ Features
 -----------------------------
 
 *	Standard [connection string format][connection string]
-*	Full [node-mongodb-native][mongodb-native] methods and events supports
+*	Full [node-mongodb-native][mongodb-native] methods supports
 *	Chainable api
 *	Introduce into [jQuery Deferred][jquery-deferred] which is based on the [CommonJS Promises/A][promises-a] design. => v0.2
 *	Control-flow => v0.2
@@ -122,11 +122,6 @@ methods
 *	cursorInfo(callback) Fetch the cursor information
 *	executeCommand(dbCommand, options, callback)
 
-events
-
-*	close
-*	error
-*	timeout
 
 ###Collection
 
